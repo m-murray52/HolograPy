@@ -32,3 +32,7 @@ In the real world however, the peak is usually less than 100% and the shape of t
 By curve fitting, the optimal parameters of the KWCA model are determined such that the KWCA fits the modelled data as closely as possible. How this is implemented is described below. 
 
 ## How to use this tool 
+
+Simply clone the repository and run `python3 curve_fit_Bragg.py --file=<path to CSV file>`. In the program's present state, you will have to provide a CSV file of Bragg Curve data which fulfills a specific format:
+
+
