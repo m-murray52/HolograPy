@@ -21,7 +21,7 @@ where ν is the phase parameter, which determines the maximum efficiency of the 
  
  ![equation](https://latex.codecogs.com/svg.latex?%5Cxi%20=%20%5Cfrac%7B2%20%5Cpi%20%5CDelta%20%5Ctheta_%7BBragg%7D%20n_%7Bfilm%7D%20T%20%5Csin(%5Ctheta_%7BBragg%7D)%7D%7B%5Clambda_%7Bair%7D%20%7D)
  
- where ![symbol](https://latex.codecogs.com/svg.latex?%5Ctheta_%7BBragg%7D) is the Bragg angle of the probing beam, ![symbol](https://latex.codecogs.com/svg.latex?%5CDelta%20%5Ctheta_%7BBragg%7D) is the angular deviation or detuning from the Bragg angle, ![symbol](https://latex.codecogs.com/svg.latex?%5Clambda_%7Bair%7D) is the wavelength of the probing beam in air, and ![symbol](https://latex.codecogs.com/svg.latex?n_%7Bfilm%7D) is the average refractive index of the grating material. 
+ where ![symbol](https://latex.cod[https://github.com/m-murray52/HolograPy/blob/main/example_bragg_curve_for_README.png](ecogs.com/svg.latex?%5Ctheta_%7BBragg%7D) is the Bragg angle of the probing beam, ![symbol](https://latex.codecogs.com/svg.latex?%5CDelta%20%5Ctheta_%7BBragg%7D) is the angular deviation or detuning from the Bragg angle, ![symbol](https://latex.codecogs.com/svg.latex?%5Clambda_%7Bair%7D) is the wavelength of the probing beam in air, and ![symbol](https://latex.codecogs.com/svg.latex?n_%7Bfilm%7D) is the average refractive index of the grating material. 
  
 For an ideal grating ν= 2/π and η = 100% when ![symbol](https://latex.codecogs.com/svg.latex?%5CDelta%20%5Ctheta_%7BBragg%7D) = 0. An example Bragg curve of an ideal grating is shown below, this is for a specific thickness..
 
@@ -33,6 +33,11 @@ By curve fitting, the optimal parameters of the KWCA model are determined such t
 
 ## How to use this tool 
 
-Simply clone the repository and run `python3 curve_fit_Bragg.py --file=<path to CSV file>`. In the program's present state, you will have to provide a CSV file of Bragg Curve data which fulfills a specific format:
+Simply clone the repository and run `python3 curve_fit_Bragg.py --file=<path to CSV file>`. In the program's present state, you will have to provide a CSV file of Bragg Curve data which fulfills a specific format as shown below:
 
+![alt text](https://github.com/m-murray52/HolograPy/blob/main/csv_format.png)
+
+The CSV file can be easily formatted and edited in Excel:
+
+![alt text](https://github.com/m-murray52/HolograPy/blob/main/csv_format_excel.png)
 
