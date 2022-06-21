@@ -51,4 +51,10 @@ A demo of the code being ran from a terminal/commadline is shown below:
 
 https://user-images.githubusercontent.com/87316384/174856211-bcbdc024-8d33-4bf7-af13-d6799a9e913a.mp4
 
+## Required software libraries
 
+1. Python 3
+2. scipy
+3. numpy
+4. pandas
+5. argparse
