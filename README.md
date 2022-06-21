@@ -41,3 +41,14 @@ The CSV file can be easily formatted and edited in Excel:
 
 ![alt text](https://github.com/m-murray52/HolograPy/blob/main/csv_format_excel.png)
 
+If the spreadsheet in which the data is stored is not formatted correctly, reorganise it as shown below:
+
+https://user-images.githubusercontent.com/87316384/174852804-885207cc-09b1-4fe5-82b5-8568f8fde1e0.mp4
+
+A demo of the code being ran from a terminal/commadline is shown below:
+
+
+
+https://user-images.githubusercontent.com/87316384/174856211-bcbdc024-8d33-4bf7-af13-d6799a9e913a.mp4
+
+
