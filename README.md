@@ -23,7 +23,7 @@ where ν is the phase parameter, which determines the maximum efficiency of the 
  
  where ![symbol](https://latex.codecogs.com/svg.latex?%5Ctheta_%7BBragg%7D) is the Bragg angle of the probing beam, ![symbol](https://latex.codecogs.com/svg.latex?%5CDelta%20%5Ctheta_%7BBragg%7D) is the angular deviation or detuning from the Bragg angle, ![symbol](https://latex.codecogs.com/svg.latex?%5Clambda_%7Bair%7D) is the wavelength of the probing beam in air, and ![symbol](https://latex.codecogs.com/svg.latex?n_%7Bfilm%7D) is the average refractive index of the grating material. 
  
-For an ideal grating ν= 2/π and η = 100% when ![symbol](https://latex.codecogs.com/svg.latex?%5CDelta%20%5Ctheta_%7BBragg%7D) = 0. An example Bragg curve of an ideal grating is shown below, this is for a specific thickness..
+For an ideal grating ν= 2/π and η = 100% when ![symbol](https://latex.codecogs.com/svg.latex?%5CDelta%20%5Ctheta_%7BBragg%7D) = 0. An example Bragg curve of an ideal grating is shown below, this is for a specific thickness and average refractive index.
 
 ![alt text](https://github.com/m-murray52/HolograPy/blob/main/example_bragg_curve_for_README.png)
 
