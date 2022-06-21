@@ -1,6 +1,6 @@
 # HolograPy
 
-This is a relatively simple tool for fitting theoretical models of diffractive optical elements to measured data. In its current state it fits the Kogelnik Coupled Wave Analysis (KCWA) model of diffraction efficiency of transmissive volume phase gratings to measured diffraction efficiencies, measured as a function of Bragg detuning angle. It finds the optimal fit of the model to the data by varying two model parameters:
+This is a relatively simple tool for fitting theoretical models of diffractive optical elements to measured data. It has been developed as part of the LIGHTSCAPE project at the Centre for Industrial Engineering Optics (IEO), funded by Science Foundation Ireland (SFI) at the Technological University Dublin (TUD).  In its current state it fits the Kogelnik Coupled Wave Analysis (KCWA) model of diffraction efficiency of transmissive volume phase gratings to measured diffraction efficiencies, measured as a function of Bragg detuning angle. It finds the optimal fit of the model to the data by varying two model parameters:
 
   1. Grating thickness (T)
   2. Refractive index modulation (RIM or  Δ n)
