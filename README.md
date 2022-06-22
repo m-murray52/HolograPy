@@ -60,6 +60,6 @@ A demo of the code being ran from a terminal/commadline is shown below:
 
 https://user-images.githubusercontent.com/87316384/174856211-bcbdc024-8d33-4bf7-af13-d6799a9e913a.mp4
 
-Note that the above example is demonstrated on Linux, on Mac the syntax is the same. On Windows, in the commandline or PowerShell, replace the forward slashes, "/", with back slashes, "\". In all cases make sure to be in the working directory of `curve_fit_Bragg.py` and make sure that the `file` commandline argument points to the location of the CSV file you wish to analyse.
+Note that the above example is demonstrated on Linux, on Mac the syntax is the same. On Windows, in the commandline or PowerShell, replace the forward slashes, "/", with back slashes, "\". In all cases make sure to be in the working directory of `curve_fit_Bragg.py` and make sure that the `file` commandline argument points to the location of the CSV file you wish to analyse. So simply run the code as shown from the correct directory, point to the file to be analysed, and press `Enter` on your keyboard.
 
 
