@@ -121,6 +121,9 @@ The code on line one is what executes the curve-fitting algorithm. The arguments
 
 The output optimised parameters are then stored in the array `popt`. The corresponding covariance matrix is stored in the array `pcov`. The square root of the diagonal values of `pcov` provide estimates of the standard deviations of the optimised parameters. Line 4 outputs an array containing the standard deviations of the optimised RIM and T respectively. These are accessed an stored as variables `perr_RIM` and `perr_T` on lines 5 and 6. Thus, providing a method of quantifiying the precision of best-fit estimates.  
 
+Improved accuracy of optimisation will be obtained by choosing the best initial guess for the parameters and the appropriate bounds. The user also has the option of using no bounds or initial guesses. 
+I have only discussed some of the arguments available with the `curve_fit()`, method. For more information please visit the[SciPy documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html).
+
 
 ## Future Work
 
@@ -128,4 +131,4 @@ I hope to eventually develop a graphical user interface GUI for running the code
 
 ## Where to learn more about general curve fitting in Python?
 
-For a general introduction to curve fitting equations to data using Python, I suggest looking at this excellent [article](https://towardsdatascience.com/basic-curve-fitting-of-scientific-data-with-python-9592244a2509) by Naveen Venkatesan on Towards Data Science. There you will learn the basic principles and how to adapt the code to your specific equation and needs. Also take a look at the [official documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html) on the Scipy website, this is especially important if you wish to see how the code works 'under the hood' as it provides links to source code.
+For a general introduction to curve fitting equations to data using Python, I suggest looking at this excellent [article](https://towardsdatascience.com/basic-curve-fitting-of-scientific-data-with-python-9592244a2509) by Naveen Venkatesan on Towards Data Science. There you will learn the basic principles and how to adapt the code to your specific equation and needs. Also take a look at the [official documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html) on the SciPy website, this is especially important if you wish to see how the code works 'under the hood' as it provides links to source code.
