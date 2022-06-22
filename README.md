@@ -62,4 +62,6 @@ https://user-images.githubusercontent.com/87316384/174856211-bcbdc024-8d33-4bf7-
 
 Note that the above example is demonstrated on Linux, on Mac the syntax is the same. On Windows, in the commandline or PowerShell, replace the forward slashes, "/", with back slashes, "\". In all cases make sure to be in the working directory of `curve_fit_Bragg.py` and make sure that the `file` commandline argument points to the location of the CSV file you wish to analyse. So simply run the code as shown from the correct directory, point to the file to be analysed, and press `Enter` on your keyboard.
 
+## Where to learn more about general curve fitting in Python?
 
+For a general introduction to curve fitting equations to data using Python, I suggest looking at this excellent [article](https://towardsdatascience.com/basic-curve-fitting-of-scientific-data-with-python-9592244a2509) by Naveen Venkatesan on Towards Data Science. You will learn the basic principles and how to adapt the code to your specific equation and needs. Also take a look at the [official documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html) on the Scipy website.
