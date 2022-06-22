@@ -5,6 +5,15 @@ This is a relatively simple tool for fitting theoretical models of diffractive o
   1. Grating thickness (T)
   2. Refractive index modulation (RIM or  Δ n)
 
+## Required software libraries
+
+1. Python 3
+2. matplotlib
+3. scipy
+4. numpy
+5. pandas
+6. argparse
+
 Before explaining how to use the tool, let's briefly review some theory.
 
 ## Theory 
@@ -51,10 +60,4 @@ A demo of the code being ran from a terminal/commadline is shown below:
 
 https://user-images.githubusercontent.com/87316384/174856211-bcbdc024-8d33-4bf7-af13-d6799a9e913a.mp4
 
-## Required software libraries
 
-1. Python 3
-2. scipy
-3. numpy
-4. pandas
-5. argparse
