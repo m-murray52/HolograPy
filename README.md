@@ -109,7 +109,7 @@ where units for `spatial_frequency`, `wavelengt_air`, and `film_thickness` are a
 The workhorse of this code is shown below:
 ![optimisation_params](https://user-images.githubusercontent.com/87316384/175016042-65f7a878-0f0c-4219-a5e0-2c9f72c3f6de.png)
 
-The code on line one is what executes the curve-fitting algorithm. The arguments provides are as follows (note that the order of appearance is crucial):
+The code on line 1 is what executes the curve-fitting algorithm. The arguments provides are as follows (note that the order of appearance is crucial):
 
 | Argument | Value |
 | ------------- | ------------- |
