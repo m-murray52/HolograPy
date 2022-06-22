@@ -110,7 +110,7 @@ def main():
     #plt.plot(angles, diffraction_efficiency(angles, *popt), 'r-', label='Best-fit, RIM = {0:.3g},'.format(RIM) + ' T = {0:.3g}'.format(curve_fit_thickness)  + r'$\mu m$')
     plt.plot(angles, diffraction_efficiency(angles, *popt), 'r-', label='Best-fit, RIM = {0:.3g},'.format(RIM) + '+/- {0:.3g}'.format(perr_RIM) + ' T = {0:.3g}'.format(curve_fit_thickness) + '+/- {0:.3g}'.format(perr_T) + r'$\mu m$')
     # Plot DE vs delta_theta
-    plt.plot(angles, DE, 'g-', label='Analytical, RIM = {0:.3g},'.format(RIM) + ' T = {0:.3g}'.format(thickness) + r'$\mu m$')
+    #plt.plot(angles, DE, 'g-', label='Analytical, RIM = {0:.3g},'.format(RIM) + ' T = {0:.3g}'.format(thickness) + r'$\mu m$')
  
     #angles = np.arange(0,len(angles),1)
     #DE = np.arange(0,len(DE),1)
@@ -118,7 +118,7 @@ def main():
     r1, r2 = spline.roots() # find the roots
     #plt.hlines(np.max(DE)/2, r1, r2, alpha = 0.75)
 
-    plt.title(r'DE vs $\Delta \theta$, Thickness $= 50 \mu m$')
+    plt.title(r'DE vs $\Delta \theta$, Design Thickness $= 50 \mu m$')
     plt.xlabel(r'$\Delta \theta_{air} (\circ)$')
     plt.ylabel('DE (au)')
 
@@ -128,7 +128,7 @@ def main():
 
 
     v = (np.pi*popt*thickness)/(wavelength_air*np.cos(bragg_angle))  
-    print('Phase parameter', v)
+    """print('Phase parameter', v)
     print('Bragg angle', bragg_angle)
     print('Wavelength air', wavelength_air)
     print('Thickness', thickness)
@@ -139,7 +139,7 @@ def main():
     #print(perr_RIM)
     print(np.shape(pcov))
     print(pcov)
-    print(perr)
+    print(perr)"""
 
 if __name__ == '__main__':
     print(__doc__)
