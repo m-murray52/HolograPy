@@ -76,7 +76,7 @@ A grating class is defined below:
 
 ![grating_class](https://user-images.githubusercontent.com/87316384/175011529-b24bdf54-ede9-47bf-a2f8-642ddf468245.png)
 
-Not, that the line numbers do not correspond to the numbers in the code, the numbers are only for illustrative purposes. As can be seen on line 3 `def __init__()` may take the following arguments for the following parameters when ever and instance of the class is defined (i.e., whenever a grating is defined):
+Note, that the line numbers do not correspond to the numbers in the code, the numbers are only for illustrative purposes. As can be seen on line 3 `def __init__()` may take the following arguments for the following parameters when ever and instance of the class is defined (i.e., whenever a grating is defined):
 
 1. spatial frequency, `spatial_frequency`
 2. probe wavelength (in air), `wavelength_air` 
@@ -119,7 +119,7 @@ The code on line one is what executes the curve-fitting algorithm. The arguments
 | Initial guess of values of RIM and T, respectively, in arra form  | `p0 = [0.01, 10]`, where 0.01 is an initial guess for RIM and 10 is an initial guess for T in microns |
 | bounds, lower and upper bounds on possible parameters  | Lower bound for both parameters set at 0 and array defining upper bounds of both parameters as follows: `bounds = (0.000, [0.05, 50])`|
 
-The output optimised parameters are then stored in the array `popt`. The corresponding covariance matrix is stored in the array `pcov`. The square root of the diagonal values of `pcov` provide estimates of the standard deviations of the optimised parameters. Line 4 outputs an array containing the standard deviations of the optimised RIM and T respectively. This are accessed an stored as variables `perr_RIM` and `perr_T` on lines 5 and 6. Thus, providing a method of quantifiying the precision of best-fit estimates.  
+The output optimised parameters are then stored in the array `popt`. The corresponding covariance matrix is stored in the array `pcov`. The square root of the diagonal values of `pcov` provide estimates of the standard deviations of the optimised parameters. Line 4 outputs an array containing the standard deviations of the optimised RIM and T respectively. These are accessed an stored as variables `perr_RIM` and `perr_T` on lines 5 and 6. Thus, providing a method of quantifiying the precision of best-fit estimates.  
 
 
 ## Future Work
