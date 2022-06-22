@@ -104,7 +104,7 @@ Here, a grating called `grating1` has be defined as `Grating` (or class instance
 
 where units for `spatial_frequency`, `wavelengt_air`, and `film_thickness` are all in microns. `n_subtrate` is 0 for no particular reason other than that this attribute is currently used nowhere else in the code. This may change in the future and this document will be updated accordingly. 
 
-## Optimising Best-fit
+#### Optimising Best-fit using initial estimates of RIM and T
 
 The workhorse of this code is shown below:
 ![optimisation_params](https://user-images.githubusercontent.com/87316384/175016042-65f7a878-0f0c-4219-a5e0-2c9f72c3f6de.png)
