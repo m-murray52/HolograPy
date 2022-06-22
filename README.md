@@ -129,6 +129,6 @@ I have only discussed some of the arguments available with the `curve_fit()`, me
 
 I hope to eventually develop a graphical user interface GUI for running the code, either locally, on a user's desktop, or in a web browser as a web app.
 
-## Where to learn more about general curve fitting in Python?
+## Want to learn more about general curve fitting in Python?
 
-For a general introduction to curve fitting equations to data using Python, I suggest looking at this excellent [article](https://towardsdatascience.com/basic-curve-fitting-of-scientific-data-with-python-9592244a2509) by Naveen Venkatesan on Towards Data Science. There you will learn the basic principles and how to adapt the code to your specific equation and needs. Also take a look at the [official documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html) on the SciPy website, this is especially important if you wish to see how the code works 'under the hood' as it provides links to source code.
+For a general introduction to curve fitting equations to data using Python, I suggest looking at this excellent [article](https://towardsdatascience.com/basic-curve-fitting-of-scientific-data-with-python-9592244a2509) by Naveen Venkatesan on Towards Data Science. There you will learn the basic principles and how to adapt the code to your specific equation and needs. Also take a look at the [official documentation](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.curve_fit.html) on the SciPy website, this is especially important if you wish to see how the code works 'under the hood' as it provides links to source code. There are also plenty of other free tutorials available in the form of blog posts and videos. 
