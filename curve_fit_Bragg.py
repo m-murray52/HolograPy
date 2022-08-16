@@ -51,7 +51,7 @@ st.set_page_config(page_title="Curve Fit", page_icon=":bar_chart:", layout="wide
 @st.cache(allow_output_mutation=True)
 def get_data_from_excel():
     df = pd.read_excel(
-        io="test_s1_29April.xlsx",
+        io="test_MM16Feb_S1_R1_bgB.xlsx",
         engine="openpyxl",
         sheet_name="in",
         skiprows=0,
@@ -84,8 +84,8 @@ def main():
     #sysBP = st.number_input(label=“systolic blood pressure”,step=1.,format="%.2f")
 
     # Thickness estimate
-    thickness = st.number_input('Enter an initial estimate of the grating thickness:')
-
+    #thickness = st.number_input('Enter an initial estimate of the grating thickness:')
+    thickness = 50
     bragg_angle = np.arcsin((sf*wavelength_air)/(2*n_film))
     # Load experimental data
     df = get_data_from_excel()
@@ -151,22 +151,7 @@ def main():
         v = (np.pi*RIM*thickness)/(wavelength_air*np.cos(bragg_angle))
         return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
 
-        
-    
-    def theoretical_diffraction_efficiency(bragg_deviation, v):
-        """The function to be determined analytically using phase parameter based on peak DE. Assumes that actual thickness is the designed thickness."""
-        bragg_deviation = np.arcsin((np.sin(np.deg2rad(bragg_deviation)))/n_film)
-        E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air)
-        return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
-       
-    
-    def cook_klein():
-        """Estimated Cook-Klein (Q) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
-        return (2*np.pi*wavelength_air*thickness)/(n_film*(period(sf))**2)
 
-    def moharam_young():
-        """Estimated Moharam-Young (ro) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
-        return (wavelength_air**2)/((n_film)*RIM_guess*period(sf)**2)
         
     #fig, ax = plt.subplots()
 
@@ -249,8 +234,8 @@ def main():
     
 
     # Print Q and ro parameters
-    print(cook_klein())
-    print(moharam_young())
+    #print(cook_klein())
+    #print(moharam_young())
     
     #print(r2 - r1)
 
