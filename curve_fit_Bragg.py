@@ -5,7 +5,6 @@ import pandas as pd
 from scipy.interpolate import UnivariateSpline
 import argparse 
 
-# load video and select frame averaging method
 parser = argparse.ArgumentParser(description='Code for plotting measured Bragg Curve Data and plottng best fit')
 parser.add_argument("--file", type=str, required= True, help='path to CSV file')
 args = parser.parse_args()
