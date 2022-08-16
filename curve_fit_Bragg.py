@@ -51,7 +51,7 @@ st.set_page_config(page_title="Curve Fit", page_icon=":bar_chart:", layout="wide
 @st.cache(allow_output_mutation=True)
 def get_data_from_excel():
     df = pd.read_excel(
-        io="test_bragg_s1_MM_22Jul22B.xlsx",
+        io="test_s1_29April.xlsx",
         engine="openpyxl",
         sheet_name="in",
         skiprows=0,
@@ -76,10 +76,12 @@ def main():
     wavelength_air = st.number_input('Enter probe laser beam wavelength in air (um):')
 
     # n_flm
+    n_film = 1.5
     n_film = st.number_input('Enter film refractive index:')
 
     # RIM
-    RIM_guess = st.number_input('Enter an initial estimate of the refractive index modulation:')
+    RIM_guess = st.number_input(label = "Enter an initial estimate of the refractive index modulation:" , step=1.,format="%.3f")
+    #sysBP = st.number_input(label=“systolic blood pressure”,step=1.,format="%.2f")
 
     # Thickness estimate
     thickness = st.number_input('Enter an initial estimate of the grating thickness:')
@@ -90,36 +92,36 @@ def main():
     
     angles = df.Angle
     # Invert measured 0-order DE
-    diff_efficiencies = list((100 - df.DE))
+    diff_efficiencies = list((100 - df.DE)*0.01)
     df['1st-order DE'] = diff_efficiencies
     st.dataframe(df)
     #fig = px.scatter(df, x="Angle", y="DE")
-    fig1 = go.Figure()
+    #fig1 = go.Figure()
 
-    fig1.add_trace(go.Scatter(
-    x=df['Angle'], y= df['DE'],
-    name='0-th Order Diffraction Efficiency',
-    mode='markers',
-    marker_color='rgba(255, 0, 0, 1)'
-    ))
+    #fig1.add_trace(go.Scatter(
+    #x=df['Angle'], y= df['DE'],
+    #name='0-th Order Diffraction Efficiency',
+    #mode='markers',
+    #marker_color='rgba(255, 0, 0, 1)'
+    #))
 
-    fig1.add_trace(go.Scatter(
-    x=df['Angle'], y=df['1st-order DE'],
-    name='1-st Order Diffraction Efficiency',
-    marker_color='rgba(0, 255, 0, 1)'
-    ))
+    #fig1.add_trace(go.Scatter(
+    #x=df['Angle'], y=df['1st-order DE'],
+    #name='1-st Order Diffraction Efficiency',
+    #marker_color='rgba(0, 255, 0, 1)'
+    #))
     
     # Set options common to all traces with fig.update_traces
-    fig1.update_traces(mode='markers', marker_line_width=1, marker_size=10)
-    fig1.update_layout(title='Styled Scatter',
-                  yaxis_zeroline=False, xaxis_zeroline=False)
+    #fig1.update_traces(mode='markers', marker_line_width=1, marker_size=10)
+    #fig1.update_layout(title='Styled Scatter',
+    #              yaxis_zeroline=False, xaxis_zeroline=False)
 
 
-    fig1.show()
+    #fig1.show()
 
     #fig = px.scatter(df, x="Angle", y=diff_efficiencies)
     #fig.show()
-    st.plotly_chart(fig1)
+    #st.plotly_chart(fig1)
     # Shift Bragg curve axis such that peak is at 0 degrees detuning angle
     # Find max DE
     max_DE = max(diff_efficiencies)
@@ -160,40 +162,40 @@ def main():
     
     def cook_klein():
         """Estimated Cook-Klein (Q) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
-        return (2*np.pi*wavelength_air*thickness)/(n_film*(period)**2)
+        return (2*np.pi*wavelength_air*thickness)/(n_film*(period(sf))**2)
 
     def moharam_young():
         """Estimated Moharam-Young (ro) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
-        return (wavelength_air**2)/((n_film)*RIM*period**2)
+        return (wavelength_air**2)/((n_film)*RIM_guess*period(sf)**2)
         
     #fig, ax = plt.subplots()
 
     # Create plot o
     #ax.plot(angles, diff_efficiencies, label='measured data')
     #st.pyplot(fig)
-    fig2 = go.Figure()
+    #fig2 = go.Figure()
 
-    fig2.add_trace(go.Scatter(
-    x=angles, y= df['DE'],
-    name='0-th Order Diffraction Efficiency',
-    mode='markers',
-    marker_color='rgba(0, 0, 255, 1)'
-    ))
+    #fig2.add_trace(go.Scatter(
+    #x=angles, y= df['DE'],
+    #name='0-th Order Diffraction Efficiency',
+    #mode='markers',
+    #marker_color='rgba(0, 0, 255, 1)'
+    #))
 
     
     # Set options common to all traces with fig.update_traces
-    fig2.update_traces(mode='markers', marker_line_width=1, marker_size=10)
-    fig2.update_layout(title='Styled Scatter',
-                  yaxis_zeroline=False, xaxis_zeroline=False)
+    #fig2.update_traces(mode='markers', marker_line_width=1, marker_size=10)
+    #fig2.update_layout(title='Styled Scatter',
+    #              yaxis_zeroline=False, xaxis_zeroline=False)
 
 
-    fig2.show()
-    st.plotly_chart(fig2)
+    #fig2.show()
+    #st.plotly_chart(fig2)
     # Curve fitting: popt is a list containing the optimised parameters, in this case, RIM and thickness; pcov is the covariance matrix
     # pcov can be used to measure the standard deviation in the estimates of optimal parameters. 
-    popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [RIM_guess, thickness], bounds=(0.001, [0.09, 20]))
+    popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [RIM_guess, thickness], bounds=(0.0001, [0.05, 50]))
     #popt
-    #print(popt)
+    print('Optimised parameters:', popt)
 
     # find square root of covariance matrix
     #perr = np.sqrt(np.diag(pcov))
