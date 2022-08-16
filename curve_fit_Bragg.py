@@ -67,7 +67,7 @@ def main():
     angles = [angle-max_DE_angle for angle in angles]
 
     # Define grating parameters (SF, probe wavelength, guessed RIM, material refractive index, designed thickness)
-    grating1 = Grating(0.8, 0.633, 0.01, 1.5, 16) 
+    grating1 = Grating(0.8, 0.633, 0.001, 1.5, 50) 
 
 
     n_film = grating1.n_film
