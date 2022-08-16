@@ -3,11 +3,11 @@ from scipy.optimize import curve_fit
 import numpy as np
 import pandas as pd
 from scipy.interpolate import UnivariateSpline
-import argparse 
 
-parser = argparse.ArgumentParser(description='Code for plotting measured Bragg Curve Data and plottng best fit')
-parser.add_argument("--file", type=str, required= True, help='path to CSV file')
-args = parser.parse_args()
+import plotly.express as px
+import plotly.graph_objects as go
+import streamlit as st
+
 
 # Set the default text font size
 plt.rc('font', size=18)
@@ -43,16 +43,83 @@ class Grating:
 
 
 
+
+# emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
+st.set_page_config(page_title="Curve Fit", page_icon=":bar_chart:", layout="wide")
+
+# ---- READ EXCEL ----
+@st.cache(allow_output_mutation=True)
+def get_data_from_excel():
+    df = pd.read_excel(
+        io="test_bragg_s1_MM_22Jul22B.xlsx",
+        engine="openpyxl",
+        sheet_name="in",
+        skiprows=0,
+        usecols="A:B",
+        #nrows=500,
+    )
+    return df
+
+def period(spatial_frequency):
+    if spatial_frequency > 0:
+        return 1/spatial_frequency
+    else:
+        pass
+
 def main():
     
-    # Load experimental data
-    file = args.file
-    df = pd.read_csv(file)
-    angles = df.Angle
+    # spatial frequency
+    sf = st.number_input('Enter recorded spatial frequency (l/um):')
     
-    # Invert measured 0-order DE
-    diff_efficiencies = list((100 - df.DE)*0.01)
 
+    # probe wavelength
+    wavelength_air = st.number_input('Enter probe laser beam wavelength in air (um):')
+
+    # n_flm
+    n_film = st.number_input('Enter film refractive index:')
+
+    # RIM
+    RIM_guess = st.number_input('Enter an initial estimate of the refractive index modulation:')
+
+    # Thickness estimate
+    thickness = st.number_input('Enter an initial estimate of the grating thickness:')
+
+    bragg_angle = np.arcsin((sf*wavelength_air)/(2*n_film))
+    # Load experimental data
+    df = get_data_from_excel()
+    
+    angles = df.Angle
+    # Invert measured 0-order DE
+    diff_efficiencies = list((100 - df.DE))
+    df['1st-order DE'] = diff_efficiencies
+    st.dataframe(df)
+    #fig = px.scatter(df, x="Angle", y="DE")
+    fig1 = go.Figure()
+
+    fig1.add_trace(go.Scatter(
+    x=df['Angle'], y= df['DE'],
+    name='0-th Order Diffraction Efficiency',
+    mode='markers',
+    marker_color='rgba(255, 0, 0, 1)'
+    ))
+
+    fig1.add_trace(go.Scatter(
+    x=df['Angle'], y=df['1st-order DE'],
+    name='1-st Order Diffraction Efficiency',
+    marker_color='rgba(0, 255, 0, 1)'
+    ))
+    
+    # Set options common to all traces with fig.update_traces
+    fig1.update_traces(mode='markers', marker_line_width=1, marker_size=10)
+    fig1.update_layout(title='Styled Scatter',
+                  yaxis_zeroline=False, xaxis_zeroline=False)
+
+
+    fig1.show()
+
+    #fig = px.scatter(df, x="Angle", y=diff_efficiencies)
+    #fig.show()
+    st.plotly_chart(fig1)
     # Shift Bragg curve axis such that peak is at 0 degrees detuning angle
     # Find max DE
     max_DE = max(diff_efficiencies)
@@ -65,16 +132,13 @@ def main():
 
     # Correct measured angles by displacing by angle of max DE
     angles = [angle-max_DE_angle for angle in angles]
+    #print(angles)
 
     # Define grating parameters (SF, probe wavelength, guessed RIM, material refractive index, designed thickness)
-    grating1 = Grating(0.8, 0.633, 0.01, 1.5, 16) 
+    #grating1 = Grating(0.8, 0.633, 0.01, 1.5, 16) 
 
 
-    n_film = grating1.n_film
-    wavelength_air = grating1.wavelength_air
-    bragg_angle = grating1.bragg_angle
-    period = 1/(grating1.spatial_frequency)
-    thickness = grating1.film_thickness
+   
     
 
     # Define function to be fitted to measured data. Takes corrected angles as independent variable.
@@ -102,47 +166,69 @@ def main():
         """Estimated Moharam-Young (ro) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
         return (wavelength_air**2)/((n_film)*RIM*period**2)
         
-    # Create plot o
-    plt.scatter(angles, diff_efficiencies, s= 20, label='measured data')
+    #fig, ax = plt.subplots()
 
+    # Create plot o
+    #ax.plot(angles, diff_efficiencies, label='measured data')
+    #st.pyplot(fig)
+    fig2 = go.Figure()
+
+    fig2.add_trace(go.Scatter(
+    x=angles, y= df['DE'],
+    name='0-th Order Diffraction Efficiency',
+    mode='markers',
+    marker_color='rgba(0, 0, 255, 1)'
+    ))
+
+    
+    # Set options common to all traces with fig.update_traces
+    fig2.update_traces(mode='markers', marker_line_width=1, marker_size=10)
+    fig2.update_layout(title='Styled Scatter',
+                  yaxis_zeroline=False, xaxis_zeroline=False)
+
+
+    fig2.show()
+    st.plotly_chart(fig2)
     # Curve fitting: popt is a list containing the optimised parameters, in this case, RIM and thickness; pcov is the covariance matrix
     # pcov can be used to measure the standard deviation in the estimates of optimal parameters. 
-    popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [grating1.RIM, thickness], bounds=(0.000, [0.06, 50]))
-    popt
+    popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [RIM_guess, thickness], bounds=(0.001, [0.09, 20]))
+    #popt
+    #print(popt)
 
     # find square root of covariance matrix
-    perr = np.sqrt(np.diag(pcov))
+    #perr = np.sqrt(np.diag(pcov))
 
     # assign standard deviations of RIM and thickness to variables
-    perr_RIM = float(perr[0])
-    perr_T = float(perr[1])
+    #perr_RIM = float(perr[0])
+    #perr_T = float(perr[1])
 
     # RIM and thickness determined by curve fitting
-    RIM = float(popt[0])
-    curve_fit_thickness = float(popt[1])
+    #RIM = float(popt[0])
+    #curve_fit_thickness = float(popt[1])
 
     # estimated phase parameter based on optimal RIM and T
-    v = (np.pi*RIM*curve_fit_thickness)/(wavelength_air*np.cos(bragg_angle))  
+    #v = (np.pi*RIM*curve_fit_thickness)/(wavelength_air*np.cos(bragg_angle))  
 
     # Next, to determine the analytically derived phase parameter, we need to find the maximum DE and assign it to a variable
-    DE_max = np.max(diff_efficiencies)
+    #DE_max = np.max(diff_efficiencies)
 
     # Analytically derived phase parameter
-    v_analytical = np.arcsin(np.sqrt(DE_max))
+    #v_analytical = np.arcsin(np.sqrt(DE_max))
 
     # RIM calculated based on v_analytical
-    RIM_analytical = float((v_analytical*wavelength_air*np.cos(bragg_angle))/(np.pi*thickness))
+    #RIM_analytical = float((v_analytical*wavelength_air*np.cos(bragg_angle))/(np.pi*thickness))
     
     # Calculate DE using theoretical model based on analytically derived parameters
-    DE = [theoretical_diffraction_efficiency(angle, v_analytical) for angle in angles]
+    #DE = [theoretical_diffraction_efficiency(angle, v_analytical) for angle in angles]
     
-
-
+    # Add subplot
+    
+    #ax.plot(angles, diffraction_efficiency(angles, *popt), 'r-', label='Best-fit, RIM = {0:.3g},'.format(RIM) + '+/- {0:.3g}'.format(perr_RIM) + ' T = {0:.3g}'.format(curve_fit_thickness) + '+/- {0:.3g}'.format(perr_T) + r'$\mu m$' + ', ' + r'$\nu$' + '={0:.3g}'.format(v))
     # Plot fitted curve with labels
-    plt.plot(angles, diffraction_efficiency(angles, *popt), 'r-', label='Best-fit, RIM = {0:.3g},'.format(RIM) + '+/- {0:.3g}'.format(perr_RIM) + ' T = {0:.3g}'.format(curve_fit_thickness) + '+/- {0:.3g}'.format(perr_T) + r'$\mu m$' + ', ' + r'$\nu$' + '={0:.3g}'.format(v))
+    #plt.plot(angles, diffraction_efficiency(angles, *popt), 'r-', label='Best-fit, RIM = {0:.3g},'.format(RIM) + '+/- {0:.3g}'.format(perr_RIM) + ' T = {0:.3g}'.format(curve_fit_thickness) + '+/- {0:.3g}'.format(perr_T) + r'$\mu m$' + ', ' + r'$\nu$' + '={0:.3g}'.format(v))
     
     # Plot theoretical curve with labels
-    plt.plot(angles, DE, 'g-', label='Analytical, RIM = {0:.3g},'.format(RIM_analytical) + ' T = {0:.3g}'.format(thickness) + r'$\mu m$' + ', ' + r'$\nu$' + '={0:.3g}'.format(v_analytical))
+    #ax.plot(angles, DE, 'g-', label='Analytical, RIM = {0:.3g},'.format(RIM_analytical) + ' T = {0:.3g}'.format(thickness) + r'$\mu m$' + ', ' + r'$\nu$' + '={0:.3g}'.format(v_analytical))
     
     #angles = np.arange(0,len(angles),1)
     #DE = np.arange(0,len(DE),1)
@@ -152,14 +238,13 @@ def main():
 
 
     # Define plot titles and axes headings
-    plt.suptitle(r'DE vs $\Delta \theta$')
-    plt.title(r'$\eta_{max}$' + '={0:.3g}'.format(max_DE))
-    plt.xlabel(r'$\Delta \theta_{air} (\circ)$')
-    plt.ylabel('DE (au)')
+    #plt.suptitle(r'DE vs $\Delta \theta$')
+    #plt.title(r'$\eta_{max}$' + '={0:.3g}'.format(max_DE))
+    #plt.xlabel(r'$\Delta \theta_{air} (\circ)$')
+    #plt.ylabel('DE (au)')
 
     # Display legend
-    plt.legend(loc='upper right')
-    plt.show()
+    
 
     # Print Q and ro parameters
     print(cook_klein())
