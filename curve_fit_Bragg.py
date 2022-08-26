@@ -47,7 +47,8 @@ def main():
     
     # Load experimental data
     file = args.file
-    df = pd.read_csv(file)
+    #df = pd.read_csv(file)
+    df = pd.read_csv('test_MM16Feb_S5_R1_bgB.csv')
     angles = df.Angle
     
     # Invert measured 0-order DE
@@ -92,8 +93,7 @@ def main():
         bragg_deviation = np.arcsin((np.sin(np.deg2rad(bragg_deviation)))/n_film)
         E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air)
         return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
-       
-    
+           
     def cook_klein():
         """Estimated Cook-Klein (Q) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
         return (2*np.pi*wavelength_air*thickness)/(n_film*(period)**2)
@@ -182,7 +182,7 @@ def main():
     print(np.shape(pcov))
     print(pcov)
     print(perr)"""
-    
+    print('optimised parameters', popt)
 
 if __name__ == '__main__':
     print(__doc__)
