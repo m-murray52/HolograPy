@@ -51,7 +51,8 @@ st.set_page_config(page_title="Curve Fit", page_icon=":bar_chart:", layout="wide
 @st.cache(allow_output_mutation=True)
 def get_data_from_excel():
     df = pd.read_excel(
-        io="test_MM16Feb_S5_R1_bgB.xlsx",
+        #io="test_MM16Feb_S5_R1_bgB.xlsx",
+        io="MM16Feb_S5_R2_bgB.xlsx",
         engine="openpyxl",
         sheet_name="in",
         skiprows=0,
@@ -97,9 +98,9 @@ def main():
     fig1 = go.Figure()
 
     # Correct 0 order 
-    df['DE'] = list((df.DE)*0.01)
+    df['0th-order DE'] = list((df.DE)*0.01)
     fig1.add_trace(go.Scatter(
-    x=df['Angle'], y= df['DE'],
+    x=df['Angle'], y= df['0th-order DE'],
     name='0-th Order Diffraction Efficiency',
     mode='markers',
     marker_color='rgba(255, 0, 0, 1)'
@@ -162,11 +163,11 @@ def main():
     
     def cook_klein():
         """Estimated Cook-Klein (Q) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
-        return (2*np.pi*wavelength_air*thickness)/(n_film*(period)**2)
+        return (2*np.pi*wavelength_air*thickness)/(n_film*(period(sf))**2)
 
     def moharam_young():
         """Estimated Moharam-Young (ro) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
-        return (wavelength_air**2)/((n_film)*RIM*period**2)
+        return (wavelength_air**2)/((n_film)**period**2)
         
     #fig, ax = plt.subplots()
 
@@ -193,20 +194,20 @@ def main():
     st.plotly_chart(fig2)
     # Curve fitting: popt is a list containing the optimised parameters, in this case, RIM and thickness; pcov is the covariance matrix
     # pcov can be used to measure the standard deviation in the estimates of optimal parameters. 
-    popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [0.01, 40], bounds=(0.001, [0.06, 50]))
-    #popt
+    popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [RIM_guess, thickness], bounds=(0, [0.02, 50]))
+    popt
     #print(popt)
 
     # find square root of covariance matrix
-    #perr = np.sqrt(np.diag(pcov))
+    perr = np.sqrt(np.diag(pcov))
 
     # assign standard deviations of RIM and thickness to variables
-    #perr_RIM = float(perr[0])
-    #perr_T = float(perr[1])
+    perr_RIM = float(perr[0])
+    perr_T = float(perr[1])
 
     # RIM and thickness determined by curve fitting
-    #RIM = float(popt[0])
-    #curve_fit_thickness = float(popt[1])
+    RIM = float(popt[0])
+    curve_fit_thickness = float(popt[1])
 
     # estimated phase parameter based on optimal RIM and T
     #v = (np.pi*RIM*curve_fit_thickness)/(wavelength_air*np.cos(bragg_angle))  
