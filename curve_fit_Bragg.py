@@ -57,7 +57,7 @@ def get_data_from_excel():
         sheet_name="in",
         skiprows=0,
         usecols="A:B",
-        #nrows=500,
+        nrows=500,
     )
     return df
 
@@ -84,59 +84,59 @@ def main():
 
     # Thickness estimate
     thickness = st.number_input('Enter an initial estimate of the grating thickness:')
-
-    bragg_angle = np.arcsin((sf*wavelength_air)/(2*n_film))
-    # Load experimental data
-    df = get_data_from_excel()
+    if st.button('Curve fit'):
+        bragg_angle = np.arcsin((sf*wavelength_air)/(2*n_film))
+        # Load experimental data
+        df = get_data_from_excel()
     
-    angles = df.Angle
+        angles = df.Angle
 
     # Invert measured 0-order DE
-    max_DE = max(df.DE)
-    diff_efficiencies = list((max_DE - df.DE)*0.01)
-    df['1st-order DE'] = diff_efficiencies
-    st.dataframe(df)
+        max_DE = max(df.DE)
+        diff_efficiencies = list((max_DE - df.DE)*0.01)
+        df['1st-order DE'] = diff_efficiencies
+        st.dataframe(df)
     #fig = px.scatter(df, x="Angle", y="DE")
-    fig1 = go.Figure()
+        fig1 = go.Figure()
 
     # Correct 0 order 
-    df['0th-order DE'] = list((df.DE-(max_DE-100))*0.01)
-    fig1.add_trace(go.Scatter(
-    x=df['Angle'], y= df['0th-order DE'],
-    name='0-th Order Diffraction Efficiency',
-    mode='markers',
-    marker_color='rgba(255, 0, 0, 1)'
-    ))
+        df['0th-order DE'] = list((df.DE-(max_DE-100))*0.01)
+        fig1.add_trace(go.Scatter(
+        x=df['Angle'], y= df['0th-order DE'],
+        name='0-th Order Diffraction Efficiency',
+        mode='markers',
+        marker_color='rgba(255, 0, 0, 1)'
+        ))
 
-    fig1.add_trace(go.Scatter(
-    x=df['Angle'], y=df['1st-order DE'],
-    name='1-st Order Diffraction Efficiency',
-    marker_color='rgba(0, 255, 0, 1)'
-    ))
+        fig1.add_trace(go.Scatter(
+        x=df['Angle'], y=df['1st-order DE'],
+        name='1-st Order Diffraction Efficiency',
+        marker_color='rgba(0, 255, 0, 1)'
+        ))
     
     # Set options common to all traces with fig.update_traces
-    fig1.update_traces(mode='markers', marker_line_width=1, marker_size=10)
-    fig1.update_layout(title='Styled Scatter',
+        fig1.update_traces(mode='markers', marker_line_width=1, marker_size=10)
+        fig1.update_layout(title='Styled Scatter',
                   yaxis_zeroline=False, xaxis_zeroline=False)
 
 
-    fig1.show()
+        fig1.show()
 
     #fig = px.scatter(df, x="Angle", y=diff_efficiencies)
     #fig.show()
-    st.plotly_chart(fig1)
+        st.plotly_chart(fig1)
     # Shift Bragg curve axis such that peak is at 0 degrees detuning angle
     # Find max DE
-    max_DE = max(diff_efficiencies)
+        max_DE = max(diff_efficiencies)
 
     # Find index of max DE
-    index_maxDE = diff_efficiencies.index(max_DE)
+        index_maxDE = diff_efficiencies.index(max_DE)
 
     # Find measured angle of max DE
-    max_DE_angle = angles[index_maxDE]
+        max_DE_angle = angles[index_maxDE]
 
     # Correct measured angles by displacing by angle of max DE
-    angles = [angle-max_DE_angle for angle in angles]
+        angles = [angle-max_DE_angle for angle in angles]
     #print(angles)
 
     # Define grating parameters (SF, probe wavelength, guessed RIM, material refractive index, designed thickness)
@@ -147,92 +147,92 @@ def main():
     
 
     # Define function to be fitted to measured data. Takes corrected angles as independent variable.
-    def diffraction_efficiency(bragg_deviation, RIM, thickness):
-        """The function to be optimised using curve fitting by varying refractive index modulation (RIM) and thickness (T), it is the Kogelnik equation for transmitted diffraction efficiency"""
-        bragg_deviation = np.arcsin((np.sin(np.deg2rad(bragg_deviation)))/n_film)
-        E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air)
-        v = (np.pi*RIM*thickness)/(wavelength_air*np.cos(bragg_angle))
-        return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
+        def diffraction_efficiency(bragg_deviation, RIM, thickness):
+            """The function to be optimised using curve fitting by varying refractive index modulation (RIM) and thickness (T), it is the Kogelnik equation for transmitted diffraction efficiency"""
+            bragg_deviation = np.arcsin((np.sin(np.deg2rad(bragg_deviation)))/n_film)
+            E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air)
+            v = (np.pi*RIM*thickness)/(wavelength_air*np.cos(bragg_angle))
+            return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
 
         
     
-    def theoretical_diffraction_efficiency(bragg_deviation, v):
-        """The function to be determined analytically using phase parameter based on peak DE. Assumes that actual thickness is the designed thickness."""
-        bragg_deviation = np.arcsin((np.sin(np.deg2rad(bragg_deviation)))/n_film)
-        E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air)
-        return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
+        def theoretical_diffraction_efficiency(bragg_deviation, v):
+            """The function to be determined analytically using phase parameter based on peak DE. Assumes that actual thickness is the designed thickness."""
+            bragg_deviation = np.arcsin((np.sin(np.deg2rad(bragg_deviation)))/n_film)
+            E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air)
+            return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
        
     
-    def cook_klein():
-        """Estimated Cook-Klein (Q) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
-        return (2*np.pi*wavelength_air*thickness)/(n_film*(period(sf))**2)
+        def cook_klein():
+            """Estimated Cook-Klein (Q) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
+            return (2*np.pi*wavelength_air*thickness)/(n_film*(period(sf))**2)
 
-    def moharam_young():
-        """Estimated Moharam-Young (ro) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
-        return (wavelength_air**2)/((n_film)**period**2)
+        def moharam_young():
+            """Estimated Moharam-Young (ro) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
+            return (wavelength_air**2)/((n_film)**period**2)
         
     #fig, ax = plt.subplots()
 
     # Create plot o
     #ax.plot(angles, diff_efficiencies, label='measured data')
     #st.pyplot(fig)
-    fig2 = go.Figure()
+        fig2 = go.Figure()
 
-    fig2.add_trace(go.Scatter(
-    x=angles, y= df['DE'],
-    name='0-th Order Diffraction Efficiency',
-    mode='markers',
-    marker_color='rgba(0, 0, 255, 1)'
-    ))
+        fig2.add_trace(go.Scatter(
+        x=angles, y= df['DE'],
+        name='0-th Order Diffraction Efficiency',
+        mode='markers',
+        marker_color='rgba(0, 0, 255, 1)'
+        ))
 
     
-    # Set options common to all traces with fig.update_traces
-    fig2.update_traces(mode='markers', marker_line_width=1, marker_size=10)
-    fig2.update_layout(title='Styled Scatter',
+        # Set options common to all traces with fig.update_traces
+        fig2.update_traces(mode='markers', marker_line_width=1, marker_size=10)
+        fig2.update_layout(title='Styled Scatter',
                   yaxis_zeroline=False, xaxis_zeroline=False)
 
 
-    fig2.show()
-    st.plotly_chart(fig2)
+        fig2.show()
+        st.plotly_chart(fig2)
     # Curve fitting: popt is a list containing the optimised parameters, in this case, RIM and thickness; pcov is the covariance matrix
     # pcov can be used to measure the standard deviation in the estimates of optimal parameters. 
-    popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [RIM_guess, thickness], bounds=(0, [0.01, 50]))
-    popt
+        popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [RIM_guess, thickness], bounds=(0, [0.01, 50]))
+        popt
     #print(popt)
 
     # find square root of covariance matrix
-    perr = np.sqrt(np.diag(pcov))
+        perr = np.sqrt(np.diag(pcov))
 
     # assign standard deviations of RIM and thickness to variables
-    perr_RIM = float(perr[0])
-    perr_T = float(perr[1])
+        perr_RIM = float(perr[0])
+        perr_T = float(perr[1])
 
     # RIM and thickness determined by curve fitting
-    RIM = float(popt[0])
-    curve_fit_thickness = float(popt[1])
+        RIM = float(popt[0])
+        curve_fit_thickness = float(popt[1])
 
-    fig3 = go.Figure()
-    df['Best fit'] = diffraction_efficiency(angles, *popt)
-    fig3.add_trace(go.Scatter(
-    x=angles, y= df['Best fit'],
-    name='Best fit',
-    mode='markers',
-    marker_color='rgba(0, 100, 255, 1)'
-    ))
+        fig3 = go.Figure()
+        df['Best fit'] = diffraction_efficiency(angles, *popt)
+        fig3.add_trace(go.Scatter(
+        x=angles, y= df['Best fit'],
+        name='Best fit',
+        mode='markers',
+        marker_color='rgba(0, 100, 255, 1)'
+        ))
 
-    fig3.add_trace(go.Scatter(
-    x=df['Angle'], y=df['1st-order DE'],
-    name='1-st Order Diffraction Efficiency',
-    marker_color='rgba(0, 255, 0, 1)'
-    ))
+        fig3.add_trace(go.Scatter(
+        x=angles, y=df['1st-order DE'],
+        name='1-st Order Diffraction Efficiency',
+        marker_color='rgba(0, 255, 0, 1)'
+        ))
     # Set options common to all traces with fig.update_traces
-    fig3.update_traces(mode='markers', marker_line_width=1, marker_size=10)
-    fig3.update_layout(title='Styled Scatter',
+        fig3.update_traces(mode='markers', marker_line_width=1, marker_size=10)
+        fig3.update_layout(title='Styled Scatter',
                   yaxis_zeroline=False, xaxis_zeroline=False)
 
 
-    fig3.show()
-    st.plotly_chart(fig3)
+        fig3.show()
+        st.plotly_chart(fig3)
     # estimated phase parameter based on optimal RIM and T
     #v = (np.pi*RIM*curve_fit_thickness)/(wavelength_air*np.cos(bragg_angle))  
 
@@ -274,7 +274,7 @@ def main():
     
 
     # Print Q and ro parameters
-    print(cook_klein())
+        print(cook_klein())
     #print(moharam_young())
     
     #print(r2 - r1)
