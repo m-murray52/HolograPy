@@ -72,12 +72,12 @@ def main():
     data = st.file_uploader("Upload a .xlsx file")
     
     # spatial frequency
-    sf = st.number_input('Enter recorded spatial frequency (l/um):')
+    sf = st.number_input('Enter recorded spatial frequency (l/um):', step= 0.001)
     
 
     # probe wavelength
-    wavelength_air = st.number_input('Enter probe laser beam wavelength in air (um):')
-
+    wavelength_air = st.number_input('Enter probe laser beam wavelength in air (nm):')
+    wavelength_air_um = wavelength_air*0.001
     # n_flm
     n_film = st.number_input('Enter film refractive index:')
 
@@ -90,7 +90,8 @@ def main():
     if sf and wavelength_air and n_film and RIM_guess and thickness:
 
         if st.button('Curve fit'):
-            bragg_angle = np.arcsin((sf*wavelength_air)/(2*n_film))
+            #wavelength_air = wavelength_air/100
+            bragg_angle = np.arcsin((sf*wavelength_air_um)/(2*n_film))
         # Load experimental data
             df = get_data_from_excel(data)
     
@@ -155,8 +156,8 @@ def main():
             def diffraction_efficiency(bragg_deviation, RIM, thickness):
                 """The function to be optimised using curve fitting by varying refractive index modulation (RIM) and thickness (T), it is the Kogelnik equation for transmitted diffraction efficiency"""
                 bragg_deviation = np.arcsin((np.sin(np.deg2rad(bragg_deviation)))/n_film)
-                E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air)
-                v = (np.pi*RIM*thickness)/(wavelength_air*np.cos(bragg_angle))
+                E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air_um)
+                v = (np.pi*RIM*thickness)/(wavelength_air_um*np.cos(bragg_angle))
                 return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
 
         
@@ -164,17 +165,17 @@ def main():
             def theoretical_diffraction_efficiency(bragg_deviation, v):
                 """The function to be determined analytically using phase parameter based on peak DE. Assumes that actual thickness is the designed thickness."""
                 bragg_deviation = np.arcsin((np.sin(np.deg2rad(bragg_deviation)))/n_film)
-                E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air)
+                E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air_um)
                 return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
        
     
             def cook_klein():
                 """Estimated Cook-Klein (Q) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
-                return (2*np.pi*wavelength_air*thickness)/(n_film*(period(sf))**2)
+                return (2*np.pi*wavelength_air_um*thickness)/(n_film*(period(sf))**2)
 
             def moharam_young():
                 """Estimated Moharam-Young (ro) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
-                return (wavelength_air**2)/((n_film)**period**2)
+                return (wavelength_air_um**2)/((n_film)**period**2)
         
     #fig, ax = plt.subplots()
 
