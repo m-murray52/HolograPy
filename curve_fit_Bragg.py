@@ -9,22 +9,6 @@ import plotly.graph_objects as go
 import streamlit as st
 
 
-# Set the default text font size
-plt.rc('font', size=18)
-# Set the axes title font size
-plt.rc('axes', titlesize=22)
-# Set the axes labels font size
-plt.rc('axes', labelsize=22)
-# Set the font size for x tick labels
-plt.rc('xtick', labelsize=18)
-# Set the font size for y tick labels
-plt.rc('ytick', labelsize=18)
-# Set the legend font size
-plt.rc('legend', fontsize=18)
-# Set the font size of the figure title
-plt.rc('figure', titlesize=24)
-
-
 class Grating:
 
     def __init__(self, spatial_frequency, wavelength_air, RIM, n_film, film_thickness) -> None:
