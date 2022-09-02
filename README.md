@@ -38,7 +38,7 @@ By curve fitting, the optimal parameters of the KWCA model are determined such t
 
 Simply click on the streamlit badge, upload a .xlsx file formatted as shown below, enter grating parameters (including estimates for thickness and refractive index modulate), and click the 'Curve fit' button. 
 
-![grating_class_instance](https://user-images.githubusercontent.com/87316384/175013469-39d11b19-d262-4efc-b9cd-ae257ebd7994.png)
+![Excel Spreadsheet format](https://github.com/m-murray52/HolograPy/blob/main/format_xlsx.png)
 
 
 
