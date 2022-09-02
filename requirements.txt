@@ -1,0 +1,6 @@
+matplotlib
+scipy
+numpy
+pandas
+plotly
+openpyxl
