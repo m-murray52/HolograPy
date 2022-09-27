@@ -72,6 +72,8 @@ def main():
     # RIM
     RIM_guess = st.number_input('Enter an initial estimate of the refractive index modulation:')
 
+    RIM_upper_bound = st.number_input('Define upper limit for the refractive index modulation:')
+
     # Thickness estimate
     thickness = st.number_input('Enter an initial estimate of the grating thickness:')
 
@@ -191,7 +193,7 @@ def main():
             #st.plotly_chart(fig2)
     # Curve fitting: popt is a list containing the optimised parameters, in this case, RIM and thickness; pcov is the covariance matrix
     # pcov can be used to measure the standard deviation in the estimates of optimal parameters. 
-            popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [RIM_guess, thickness], bounds=(0, [0.01, 50]))
+            popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [RIM_guess, thickness], bounds=(0, [RIM_upper_bound, 50]))
             #popt
             
     #print(popt)
