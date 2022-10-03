@@ -41,7 +41,7 @@ def get_data_from_excel(data):
         sheet_name="in",
         skiprows=0,
         usecols="A:B",
-        nrows=1000,
+        #nrows=1000,
     )
     return df
 
