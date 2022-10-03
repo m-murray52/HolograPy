@@ -83,6 +83,7 @@ def main():
             #wavelength_air = wavelength_air/100
             bragg_angle = np.arcsin((sf*wavelength_air_um)/(2*n_film))
         # Load experimental data
+            pd.set_option("display.max_rows", None, "display.max_columns", None)
             df = get_data_from_excel(data)
     
             angles = df.Angle
