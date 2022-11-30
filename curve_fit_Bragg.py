@@ -239,8 +239,8 @@ def main():
             v = (np.pi*RIM*curve_fit_thickness)/(wavelength_air_um*np.cos(bragg_angle))  
 
     # Print Q and ro parameters
-            print(cook_klein())
-            print(moharam_young())
+            #print(cook_klein())
+            #print(moharam_young())
 
             st.header('Best fit parameters')
             col1, col2 = st.columns(2)
