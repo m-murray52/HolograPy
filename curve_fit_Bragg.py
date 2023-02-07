@@ -163,7 +163,7 @@ def main():
                 return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
        
     
-            def cook_klein():
+            def cook_klein(thickness):
                 """Estimated Cook-Klein (Q) parameter, to be printed to commandline/terminal. Serves as a 'reality check'."""
                 return (2*np.pi*wavelength_air_um*thickness)/(n_film*(period(sf))**2)
 
@@ -252,7 +252,7 @@ def main():
             st.header('Other parameters')
             col1, col2, col3 = st.columns(3)
             col1.metric("Phase parameter", '{0:.3g}'.format(v))
-            col2.metric("Cook-Klein Parameter", "{0:.3g}".format(cook_klein()))
+            col2.metric("Cook-Klein Parameter", "{0:.3g}".format(cook_klein(curve_fit_thickness)))
             col3.metric("Moharam-Young Parameter", "{0:.3g}".format(moharam_young(RIM)))
 
 
