@@ -33,16 +33,8 @@ st.set_page_config(page_title="Curve Fit", page_icon=":bar_chart:", layout="wide
 
 # ---- READ EXCEL ----
 @st.cache(allow_output_mutation=True)
-def get_data_from_excel(data):
-    df = pd.read_excel(
-        #io="test_MM16Feb_S5_R1_bgB.xlsx",
-        io=data,
-        engine="openpyxl",
-        sheet_name="in",
-        skiprows=0,
-        usecols="A:B",
-        nrows=1000,
-    )
+def get_data_from_csv(data):
+    df = pd.read_csv("bragg_s2_2_5_NPs_2Mar2023_MMB.csv")
     return df
 
 def period(spatial_frequency):
@@ -86,8 +78,8 @@ def main():
             bragg_angle = np.arcsin((sf*wavelength_air_um)/(2*n_film))
         # Load experimental data
             pd.set_option("display.max_rows", None, "display.max_columns", None)
-            df = get_data_from_excel(data)
-    
+            #df = get_data_from_excel(data)
+            df = get_data_from_csv(data)
             angles = df.Angle
 
     # Invert measured 0-order DE
