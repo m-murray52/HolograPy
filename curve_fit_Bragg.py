@@ -94,7 +94,7 @@ def main():
             df['0th-order DE'] = list((df.DE-(max_DE-100))*0.01)
 
             # Invert corrected 0-order DE to get 1st order
-            max_DE = max(df['0th-order DE'].DE)
+            max_DE = max(df['0th-order DE'])
             diff_efficiencies = list((max_DE - df['0th-order DE'].DE)*0.01)
             df['1st-order DE'] = diff_efficiencies
             
