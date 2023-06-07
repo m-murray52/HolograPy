@@ -95,7 +95,7 @@ def main():
 
             # Invert corrected 0-order DE to get 1st order
             max_DE = max(df['0th-order DE'])
-            diff_efficiencies = list((max_DE - df['0th-order DE'].DE)*0.01)
+            diff_efficiencies = list((max_DE - df['0th-order DE'])*0.01)
             df['1st-order DE'] = diff_efficiencies
             
             st.dataframe(df)
