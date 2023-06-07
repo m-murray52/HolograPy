@@ -84,14 +84,20 @@ def main():
 
     # Invert measured 0-order DE
             max_DE = max(df.DE)
-            diff_efficiencies = list((max_DE - df.DE)*0.01)
-            df['1st-order DE'] = diff_efficiencies
+            #diff_efficiencies = list((max_DE - df.DE)*0.01)
+            #df['1st-order DE'] = diff_efficiencies
             
     #fig = px.scatter(df, x="Angle", y="DE")
             fig1 = go.Figure()
 
     # Correct 0 order 
             df['0th-order DE'] = list((df.DE-(max_DE-100))*0.01)
+
+            # Invert corrected 0-order DE to get 1st order
+            max_DE = max(df['0th-order DE'].DE)
+            diff_efficiencies = list((max_DE - df['0th-order DE'].DE)*0.01)
+            df['1st-order DE'] = diff_efficiencies
+            
             st.dataframe(df)
             fig1.add_trace(go.Scatter(
             x=df['Angle'], y= df['0th-order DE'],
