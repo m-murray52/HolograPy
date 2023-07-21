@@ -47,7 +47,7 @@ def main():
     st.title('Best-fit Kogelnik Equation to Bragg Diffraction Efficiency Data')    
 
     st.header('Data Uploader')
-    data = st.file_uploader("Upload a .xlsx file")
+    data = st.file_uploader("Upload a .csv file")
 
 
     st.header('Input grating parameters')
