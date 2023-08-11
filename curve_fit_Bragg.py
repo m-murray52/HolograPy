@@ -34,7 +34,7 @@ st.set_page_config(page_title="Curve Fit", page_icon=":bar_chart:", layout="wide
 # ---- READ EXCEL ----
 @st.cache(allow_output_mutation=True)
 def get_data_from_csv(data):
-    df = pd.read_csv("bragg_s2_2_5_NPs_2Mar2023_MMB.csv")
+    df = pd.read_csv(data)
     return df
 
 def period(spatial_frequency):
@@ -47,7 +47,7 @@ def main():
     st.title('Best-fit Kogelnik Equation to Bragg Diffraction Efficiency Data')    
 
     st.header('Data Uploader')
-    data = st.file_uploader("Upload a .xlsx file")
+    data = st.file_uploader("Upload a .csv file")
 
 
     st.header('Input grating parameters')
@@ -94,10 +94,10 @@ def main():
             df['0th-order DE'] = list((df.DE-(max_DE-100))*0.01)
 
             # Invert corrected 0-order DE to get 1st order
-            max_DE = max(df['0th-order DE'].DE)
-            diff_efficiencies = list((max_DE - df['0th-order DE'].DE)*0.01)
+            max_DE = max(df['0th-order DE'])
+            diff_efficiencies = list((1 - df['0th-order DE']))
             df['1st-order DE'] = diff_efficiencies
-
+            
             st.dataframe(df)
             fig1.add_trace(go.Scatter(
             x=df['Angle'], y= df['0th-order DE'],
