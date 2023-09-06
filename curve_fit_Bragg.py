@@ -61,17 +61,20 @@ def main():
     # n_flm
     n_film = st.number_input('Enter film refractive index:')
 
-    # RIM
-    RIM_guess = st.number_input('Enter an initial estimate of the refractive index modulation:')
+    # n_flm
+    absorption_film = st.number_input('Enter film absorption:')
 
-    RIM_upper_bound = st.number_input('Define upper limit for the refractive index modulation:')
+    # RIM
+    absorption_modulation_guess = st.number_input('Enter an initial estimate of the refractive index modulation:')
+
+    absorption_mod_upper_bound = st.number_input('Define upper limit for the refractive index modulation:')
 
     # Thickness estimate
     thickness = st.number_input('Enter an initial estimate of the grating thickness (um):')
 
     thickness_upper_bound = st.number_input('Define upper limit for the film thickness (um):')
 
-    if sf and wavelength_air and n_film and RIM_guess and thickness:
+    if sf and wavelength_air and n_film and absorption_modulation_guess  and thickness:
 
         if st.button('Curve fit'):
             #wavelength_air = wavelength_air/100
@@ -145,12 +148,13 @@ def main():
     
 
     # Define function to be fitted to measured data. Takes corrected angles as independent variable.
-            def diffraction_efficiency(bragg_deviation, RIM, thickness):
-                """The function to be optimised using curve fitting by varying refractive index modulation (RIM) and thickness (T), it is the Kogelnik equation for transmitted diffraction efficiency"""
+            def diffraction_efficiency(bragg_deviation, absorption_modulation, thickness):
+                """The function to be optimised using curve fitting by varying absorption modulation (RIM) and thickness (T), it is the Kogelnik equation for transmitted diffraction 
+                efficiency of unlsanted absorption gratings"""
                 bragg_deviation = np.arcsin((np.sin(np.deg2rad(bragg_deviation)))/n_film)
                 E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air_um)
-                v = (np.pi*RIM*thickness)/(wavelength_air_um*np.cos(bragg_angle))
-                return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
+                v = (absorption_modulation*thickness)/(2*np.cos(bragg_angle))
+                return ( (np.cos(E))**2 + (np.sin(E)**2) )*( np.exp(-2*absorption_film*thickness/(np.cos(bragg_angle))) )*( np.sinh((v**2 + E**2))/(1-(E**2)/(v**2)) )
 
         
     
@@ -158,7 +162,7 @@ def main():
                 """The function to be determined analytically using phase parameter based on peak DE. Assumes that actual thickness is the designed thickness."""
                 bragg_deviation = np.arcsin((np.sin(np.deg2rad(bragg_deviation)))/n_film)
                 E = (bragg_deviation*2*np.pi*n_film*thickness*np.sin(bragg_angle))/(wavelength_air_um)
-                return (np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
+                return ( (np.cos(E))**2 + (np.sin(E)**2) )*(np.sin(np.sqrt((v)**2 + E**2)))**2/(1+(E**2/(v)**2))
        
     
             def cook_klein(thickness):
@@ -192,9 +196,12 @@ def main():
 
             #fig2.show()
             #st.plotly_chart(fig2)
+
+
+
     # Curve fitting: popt is a list containing the optimised parameters, in this case, RIM and thickness; pcov is the covariance matrix
     # pcov can be used to measure the standard deviation in the estimates of optimal parameters. 
-            popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [RIM_guess, thickness], bounds=(0, [RIM_upper_bound, thickness_upper_bound]))
+            popt, pcov = curve_fit(diffraction_efficiency, angles, diff_efficiencies, p0= [absorption_modulation_guess, thickness], bounds=(0, [absorption_mod_upper_bound, thickness_upper_bound]))
             #popt
             
     #print(popt)
@@ -203,9 +210,9 @@ def main():
             perr = np.sqrt(np.diag(pcov))
             #perr
     # assign standard deviations of RIM and thickness to variables
-            perr_RIM = float(perr[0])
+            perr_absorption_mod = float(perr[0])
             perr_T = float(perr[1])
-            RIM = float(popt[0])
+            absorption_modulation = float(popt[0])
             curve_fit_thickness = float(popt[1])
 
             
@@ -236,7 +243,7 @@ def main():
             fig2.show()
             st.plotly_chart(fig2)
     # estimated phase parameter based on optimal RIM and T
-            v = (np.pi*RIM*curve_fit_thickness)/(wavelength_air_um*np.cos(bragg_angle))  
+            v = (absorption_modulation*thickness)/(2*np.cos(bragg_angle))
 
     # Print Q and ro parameters
             #print(cook_klein())
@@ -244,14 +251,13 @@ def main():
 
             st.header('Best fit parameters')
             col1, col2 = st.columns(2)
-            col1.metric("Refractive index modulation", "{0:.3g}".format(RIM) + "+/- {0:.3g}".format(perr_RIM))
+            col1.metric("Absorption modulation", "{0:.3g}".format(absorption_modulation) + "+/- {0:.3g}".format(perr_absorption_mod))
             col2.metric("Thickness", "{0:.3g}".format(curve_fit_thickness) + "+/- {0:.3g}".format(perr_T) + ' um')
     #print(r2 - r1)
             st.header('Other parameters')
             col1, col2, col3 = st.columns(3)
             col1.metric("Phase parameter", '{0:.3g}'.format(v))
-            col2.metric("Cook-Klein Parameter", "{0:.3g}".format(cook_klein(curve_fit_thickness)))
-            col3.metric("Moharam-Young Parameter", "{0:.3g}".format(moharam_young(RIM)))
+            
 
 
     #v = (np.pi*popt[0]*thickness)/(wavelength_air*np.cos(bragg_angle))  
