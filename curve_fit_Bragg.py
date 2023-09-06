@@ -61,11 +61,6 @@ def main():
     # n_flm
     n_film = st.number_input('Enter film refractive index:')
 
-    # RIM
-    RIM_guess = st.number_input('Enter an initial estimate of the refractive index modulation:')
-
-    RIM_upper_bound = st.number_input('Define upper limit for the refractive index modulation:')
-
     # n_flm
     absorption_film = st.number_input('Enter film absorption:')
 
@@ -79,7 +74,7 @@ def main():
 
     thickness_upper_bound = st.number_input('Define upper limit for the film thickness (um):')
 
-    if sf and wavelength_air and n_film and RIM_guess and thickness:
+    if sf and wavelength_air and n_film and absorption_modulation_guess  and thickness:
 
         if st.button('Curve fit'):
             #wavelength_air = wavelength_air/100
