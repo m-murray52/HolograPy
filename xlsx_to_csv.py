@@ -67,11 +67,4 @@ for csv_file in csv_files:
 # Read .csv files from directory again
 csv_files = [file for file in glob.glob("*.csv")]
 
-test_csv_file = "test.csv"
 
-for file in csv_files:
-    with open(file, "r") as source:
-        #reader = csv.reader(source, delimiter= '\t')
-        data = source.read().replace('\t', ',')
-        print(data, file=open("mod"+file, 'w'))
-      
