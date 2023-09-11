@@ -224,7 +224,7 @@ def main():
 
             fig2.add_trace(go.Scatter(
             x=angles, y=df['1st-order DE'],
-            name='1-st OrderDiffraction Efficiency',
+            name='Diffraction Efficiency',
             marker_color='rgba(0, 255, 0, 1)'
             ))
     # Set options common to all traces with fig.update_traces
