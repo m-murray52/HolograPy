@@ -229,7 +229,7 @@ def main():
             ))
     # Set options common to all traces with fig.update_traces
             fig2.update_traces(mode='markers', marker_line_width=1, marker_size=10)
-            fig2.update_layout(xaxis_title="Angle ", yaxis_title="DE (%)",
+            fig2.update_layout(xaxis_title="Angle ", yaxis_title="DE (au)",
                   yaxis_zeroline=True, xaxis_zeroline=False, font_size=20, legend_font_size=18)
 
             st.header('Plot Best fit')
