@@ -36,7 +36,7 @@ By curve fitting, the optimal parameters of the KWCA model are determined such t
 
 # How to use the app
 
-Simply click on the streamlit badge, upload a .xlsx file formatted as shown below, enter grating parameters (including estimates for thickness and refractive index modulate), and click the 'Curve fit' button. 
+Simply click on the streamlit badge, upload a .xlsx file formatted as shown below, enter grating parameters (including estimates for thickness and refractive index modulate), and click the 'Curve fit' button. In it's current state, the webapp is designed for in house use at the IEO. Typically experimental data is out put in an old fashioned .xls file. These files need to be converted to .xlsx using Excel. Once converted, the xlsx_to_csv.py can be run in the directory containing the .xlsx files of interest. Note that it assumes that the only .xlsx files in the directory are those that were recently converted, and it assumes that there are no pre-existing csv files in the directory. This of course can be adapted by the user in there local repository. This was a quick fix. 
 
 ![Excel Spreadsheet format](https://github.com/m-murray52/HolograPy/blob/main/format_xlsx.png)
 
