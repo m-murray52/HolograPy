@@ -32,7 +32,7 @@ class Grating:
 st.set_page_config(page_title="Curve Fit", page_icon=":bar_chart:", layout="wide")
 
 # ---- READ EXCEL ----
-@st.cache_data(allow_output_mutation=True)
+@st.cache_data()
 def get_data_from_csv(data):
     df = pd.read_csv(data)
     return df
