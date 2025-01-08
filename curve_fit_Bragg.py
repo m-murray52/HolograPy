@@ -243,7 +243,7 @@ def main():
             #print(moharam_young())
 
             st.header('Best fit parameters')
-            col1, col2 = st.columns(3)
+            col1, col2, col3 = st.columns(3)
             col1.metric("Refractive index modulation", "{0:.3g}".format(RIM) + "+/- {0:.3g}".format(perr_RIM))
             col2.metric("Thickness", "{0:.3g}".format(curve_fit_thickness) + "+/- {0:.3g}".format(perr_T) + ' um')
             col3.metric("Maximum DE", "{0:.3g}".format(max_DE))
